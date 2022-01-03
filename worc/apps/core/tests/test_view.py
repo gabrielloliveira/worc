@@ -51,8 +51,8 @@ def test_list_candidate(candidate, client):
     """
     response = client.get(reverse("core:candidate_list_create"))
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert response.data[0]["name"] == candidate.name
+    assert len(response.data["results"]) == 1
+    assert response.data["results"][0]["name"] == candidate.name
 
 
 def test_retrieve_candidate(candidate, client):
@@ -94,5 +94,5 @@ def test_destroy_candidate(candidate, client):
     list_response = client.get(reverse("core:candidate_list_create"))
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert list_response.status_code == status.HTTP_200_OK
-    assert len(list_response.data) == 0
+    assert len(list_response.data["results"]) == 0
     assert Candidate.objects.count() == 0
