@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 
 from worc.apps.core.filtersets import CandidateFilterSet
@@ -25,3 +26,6 @@ class CandidateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
     serializer_class = CandidateSerializer
     queryset = Candidate.objects.all()
+
+    def get_object(self):
+        return get_object_or_404(Candidate, pk=self.kwargs.get("pk"))
