@@ -9,4 +9,9 @@ urlpatterns = [
         viewsets.CandidateListCreate.as_view(),
         name="candidate_list_create",
     ),
+    path(
+        "candidates/<int:pk>/",
+        viewsets.CandidateRetrieveUpdateDestroy.as_view(),
+        name="candidate_retrieve_update_destroy",
+    ),
 ]
