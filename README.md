@@ -98,6 +98,25 @@ linhas do método get_queryset())
 
 ![Filtersets](prints/filtersets.png "Filtersets")
 
+Agora, tratando da regra de negócio do projeto, que eram:
+- O email e o CPF do candidato devem ser únicos
+- O candidato deverá ter a idade maior ou igual a 18 anos
+- O candidato não poderá ter seu CPF alterado
+
+Eu coloquei a maior parte destas regras no model, pois é de responsabilidade do mesmo. Desta forma, esses validadores
+servirão para outros casos (se a aplicação fizesse o uso de forms, por exemplo).
+
+![Validators](prints/validators.png "Validators")
+
+Apenas a validação de que o CPF não pode ser alterado é feita no serializer, através do método padrão 
+`validate_field_name`.
+
+Uma curiosidade é que eu poderia ter utilizado alguns campos como `CPFField()` que existem numa lib que eu 
+criei https://github.com/gabrielloliveira/django-cpf.
+Porém, optei por adicionar somente o validator que eu utilizo na minha lib neste projeto.
+
+![Serializer](prints/serializer.png "Serializer")
+
 ## Descreva sua API REST de forma simplificada.
 
 Deixei um arquivo de Insomnia na raiz do projeto que serve de exemplo de requests já prontas.
