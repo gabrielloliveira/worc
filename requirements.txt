@@ -9,6 +9,7 @@ dj-database-url==0.5.0
 Django==4.0
 django-filter==21.1
 djangorestframework==3.13.1
+djangorestframework-simplejwt==5.0.0
 drf-yasg==1.20.0
 idna==3.3
 inflection==0.5.1
@@ -21,6 +22,7 @@ packaging==21.3
 pluggy==1.0.0
 psycopg2-binary==2.9.3
 py==1.11.0
+PyJWT==2.3.0
 pyparsing==3.0.6
 pytest==6.2.5
 pytest-django==4.5.2
