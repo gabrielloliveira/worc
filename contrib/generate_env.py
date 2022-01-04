@@ -1,4 +1,6 @@
+import os
 from pathlib import Path
+
 from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,3 +12,6 @@ ALLOWED_HOSTS=*
 
 file = open(f"{BASE_DIR}/worc/.env", "w")
 file.write(ENV_VARIABLES)
+
+if not os.path.exists(f"{BASE_DIR}/logs"):
+    os.mkdir(f"{BASE_DIR}/logs")
