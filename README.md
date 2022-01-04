@@ -111,11 +111,11 @@ servirão para outros casos (se a aplicação fizesse o uso de forms, por exempl
 Apenas a validação de que o CPF não pode ser alterado é feita no serializer, através do método padrão 
 `validate_field_name`.
 
+![Serializer](prints/serializer.png "Serializer")
+
 Uma curiosidade é que eu poderia ter utilizado alguns campos como `CPFField()` que existem numa lib que eu 
 criei https://github.com/gabrielloliveira/django-cpf.
 Porém, optei por adicionar somente o validator que eu utilizo na minha lib neste projeto.
-
-![Serializer](prints/serializer.png "Serializer")
 
 ## Descreva sua API REST de forma simplificada.
 
