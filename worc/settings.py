@@ -138,3 +138,50 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
+
+# LOGGING CONFIGURATION
+
+LOGGING = {
+    "version": 1,
+    "loggers": {
+        "django": {"handlers": ["info_handler", "debug_handler"], "level": "DEBUG"}
+    },
+    "handlers": {
+        "info_handler": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "./logs/info.log",
+            "formatter": "simpleRe",
+        },
+        "debug_handler": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "./logs/debug.log",
+            "formatter": "simpleRe",
+        },
+        "warning_handler": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": "./logs/warning.log",
+            "formatter": "simpleRe",
+        },
+        "error_handler": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": "./logs/error.log",
+            "formatter": "simpleRe",
+        },
+        "fatal_handler": {
+            "level": "FATAL",
+            "class": "logging.FileHandler",
+            "filename": "./logs/fatal.log",
+            "formatter": "simpleRe",
+        },
+    },
+    "formatters": {
+        "simpleRe": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        }
+    },
+}
