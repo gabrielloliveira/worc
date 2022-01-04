@@ -1,20 +1,24 @@
+import json
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 
 from worc.apps.core.models import Candidate
 
 
-def test_create_candidate(client, db, candidate_data):
+def test_create_candidate(api_client, db, candidate_data):
     """
     Test creating a candidate
     """
-    response = client.post(reverse("core:candidate_list_create"), data=candidate_data)
+    response = api_client.post(
+        reverse("core:candidate_list_create"), data=candidate_data
+    )
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["name"] == candidate_data["name"]
     assert Candidate.objects.count() == 1
 
 
-def test_create_candidate_with_invalid_data(client, candidate_json_data, db):
+def test_create_candidate_with_invalid_data(api_client, candidate_json_data, db):
     """
     Test creating a candidate with invalid data
     """
@@ -27,14 +31,14 @@ def test_create_candidate_with_invalid_data(client, candidate_json_data, db):
     data_without_cpf = candidate_json_data.copy()
     del data_without_cpf["cpf"]
 
-    response_1 = client.post(reverse("core:candidate_list_create"), data={})
-    response_2 = client.post(
+    response_1 = api_client.post(reverse("core:candidate_list_create"), data={})
+    response_2 = api_client.post(
         reverse("core:candidate_list_create"), data=data_without_name
     )
-    response_3 = client.post(
+    response_3 = api_client.post(
         reverse("core:candidate_list_create"), data=data_without_email
     )
-    response_4 = client.post(
+    response_4 = api_client.post(
         reverse("core:candidate_list_create"), data=data_without_cpf
     )
 
@@ -45,36 +49,36 @@ def test_create_candidate_with_invalid_data(client, candidate_json_data, db):
     assert Candidate.objects.count() == 0
 
 
-def test_list_candidate(candidate, client):
+def test_list_candidate(candidate, api_client):
     """
     Test listing candidates
     """
-    response = client.get(reverse("core:candidate_list_create"))
+    response = api_client.get(reverse("core:candidate_list_create"))
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data["results"]) == 1
     assert response.data["results"][0]["name"] == candidate.name
 
 
-def test_retrieve_candidate(candidate, client):
+def test_retrieve_candidate(candidate, api_client):
     """
     Test retrieve candidate
     """
-    response = client.get(
+    response = api_client.get(
         reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk})
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.data["name"] == candidate.name
 
 
-def test_update_candidate(candidate, candidate_json_data, client):
+def test_update_candidate(candidate, candidate_json_data, api_client):
     """
     Test update candidate
     """
     candidate_json_data["name"] = "New Name"
 
-    response = client.put(
+    response = api_client.put(
         reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk}),
-        data=candidate_json_data,
+        data=json.dumps(candidate_json_data),
         content_type="application/json",
     )
     candidate.refresh_from_db()
@@ -84,14 +88,14 @@ def test_update_candidate(candidate, candidate_json_data, client):
     assert Candidate.objects.count() == 1
 
 
-def test_destroy_candidate(candidate, client):
+def test_destroy_candidate(candidate, api_client):
     """
     Test destroy candidate
     """
-    response = client.delete(
+    response = api_client.delete(
         reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk})
     )
-    list_response = client.get(reverse("core:candidate_list_create"))
+    list_response = api_client.get(reverse("core:candidate_list_create"))
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert list_response.status_code == status.HTTP_200_OK
     assert len(list_response.data["results"]) == 0
