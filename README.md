@@ -23,24 +23,35 @@ Se não tiver o docker, nem o docker compose, tem que instalar na mão. Para iss
 
 - O projeto se chama `worc` e está localizado na pasta raiz do projeto.
 - Dentro da pasta worc, eu tenho uma python package chamado `apps`. Nesta pasta, eu tenho todas as minhas apps 
-que usarei no projeto (só precisei de uma, mas poderia ter mais, dependendo do projeto).
+que usarei no projeto (só precisei de duas, mas poderia ter mais, dependendo do projeto).
 
 ![Estrutura do projeto](prints/tree.png "Estrutura do projeto")
 
 - A pasta `contrib` situada na raiz do projeto serve para fazer o "setup" do projeto. Nela,
 coloquei um script que irá gerar um arquivo com as variáveis de ambiente "padrões" para o projeto.
 
-Para esta aplicação, devido ao objetivo do teste, que era o CRUD de 1 tabela, eu optei por criar somente uma 
-app chamada core.
+Para esta aplicação, devido ao objetivo do teste, que era o CRUD de 1 tabela, eu optei por criar 2 apps: uma app core,
+que contém a tabela dos candidatos e outra app users, que contém o modelo de usuário da aplicação.
 
-Se o problema descrito pedisse para criar outras entidades, como um gestor ou empresas, provavelmente eu teria optado
-por criar outras apps (users e companies, por exemplo).
+Se o problema descrito pedisse para criar outras entidades, como empresas, tabela de ponto, tabela que mostra 
+as vagas das empresas, etc, provavelmente eu teria optado
+por criar outras apps (companies, por exemplo).
 
 ## Explicando as decisões de design adotadas para a solução do desafio e organização do projeto
 
 ** Disclaimer: Todas as decisões sempre são tomadas pensando no futuro da aplicação, quem irá dar manutenção e 
 se terá muita gente no time. Para ser mais direto, sempre tento programar de uma forma que possibilite um estagiário 
 ou um júnior colocar a mão na massa logo no primeiro dia.
+
+Na minha resulução, preferi colocar uma tabela de usuário para fazer autenticação e utilizar de recursos como JWT. Isso
+porquê tive a sensação que estaria muito "exposto" se deixasse tudo aberto rsrs. Aqui está um resumo do que pode ser 
+visto e feito dado o nível de usuário:
+
+![Usuários do projeto](prints/user-case.png "Usuários do projeto")
+
+Pra gerenciar essas permissões, eu cria uma CustomPermission do projeto. Se chama `IsAdminOrReadOnly`.
+
+![Permissao](prints/permission.png "Permissão de usuário")
 
 As variáveis de ambiente são informações sensíveis. Gosto de gerenciá-las através do python-decouple.
 Isso seria o ideal, pois, ao meu ver, torna mais fácil de manter o projeto. Se esse projeto
@@ -68,13 +79,14 @@ APIViews e ModelViewSet. Acredito ser mais fácil de entender e manter, pensando
 pessoas entrando no projeto.
 
 Fiz testes automatizados utilizando o pyest, que, na minha opinião, é a melhor ferramente que tem para testar.
-Aproveitando isso, tomei a liberdade de configurar uma action de CI aqui no github. Toda vez que eh feito um pull
+Aproveitando isso, tomei a liberdade de configurar uma action de CI aqui no github. Toda vez que é feito um pull
 request para a branch main (a branch principal), o CI executa os testes automatizados.
 
 Eu gosto sempre de criar uma pasta de testes para cada app. Nela, posso organizar em testes de models, de views, 
 de signals, etc.
 
-Caso eu tivesse mais de um model, eu teria, por exemplo, um arquivo de `test_model_modelname.py`
+Caso eu tivesse mais de um model, eu teria, por exemplo, um arquivo de `test_model_modelname.py`. Da mesma forma para
+os serializers e as views de cada entidade.
 
 ![Tests](prints/tests.png "Tests")
 
@@ -88,7 +100,9 @@ linhas do método get_queryset())
 
 ## Descreva sua API REST de forma simplificada.
 
-Minha API REST possui 2 endpoints:
+Deixei um arquivo de Insomnia na raiz do projeto que serve de exemplo de requests já prontas.
+
+Para a entidade de candidatos, tenho 2 endpoints:
 `{URL_BASE}/api/candidates/` e `{URL_BASE}/api/candidates/{id}/`.
 
 Como padrão do REST, o primeiro endpoint aceita os métodos GET e POST, como listagem e 
@@ -96,3 +110,15 @@ criação de candidatos, respectivamente.
 
 O segundo endpoint aceita os métodos GET, PUT, PATCH e DELETE, como listagem, edição, edição parcial e exclusão de um 
 candidato, respectivamente.
+
+Lembrando que todo endpoint com um método que provoque um efeito colateral na base de dados, como o POST, PUT, 
+PATCH e DELETE, deve ser feita através de um token de autenticação no cabeçalho da requisição.
+Fazemos isso com:
+`Authorization: Bearer {TOKEN}`
+
+Já na entidade de usuário, tenho 3 endpoints:
+
+    * Cadastro de usuário: POST {URL_BASE}/api/users/
+    * Pegar o token do usuário/fazer login: POST {URL_BASE}/api/token/
+    * Atualizar o token: POST {URL_BASE}/api/token/refresh/
+
