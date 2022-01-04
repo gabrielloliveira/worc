@@ -1,13 +1,13 @@
 # worc
 
-Projeto feito para a reoslução do desafio técnico da Worc.
+Projeto feito para a resolução do desafio técnico da Worc.
 
 ## Como executar a aplicação
 
 Caso você tenha o docker instalado, basta executar o seguinte comando:
 `docker-compose up -d --build`
 
-Se não tiver o docker, nem o docker compose, tem que instalar na mão. Para isso, siga os seguintes passos:
+Se não tiver o docker, nem o docker compose e quer instalar o projeto na mão, siga os seguintes passos:
 
 - Baixe o Python, de preferência a versão 3.8 ou mais recente.
 - Clonar o projeto: `git clone git@github.com:gabrielloliveira/worc.git`
