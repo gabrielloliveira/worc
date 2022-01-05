@@ -29,6 +29,8 @@ que usarei no projeto (só precisei de duas, mas poderia ter mais, dependendo do
 
 - A pasta `contrib` situada na raiz do projeto serve para fazer o "setup" do projeto. Nela,
 coloquei um script que irá gerar um arquivo com as variáveis de ambiente "padrões" para o projeto.
+- O arquivo `generate_env.py` é um script python que seta algumas variáveis de ambiente padrão para o projeto e cria 
+um diretório chamado "logs" para armazenar os logs do projeto, configurados no arquivo de settings.
 
 Para esta aplicação, devido ao objetivo do teste, que era o CRUD de 1 tabela, eu optei por criar 2 apps: uma app core,
 que contém a tabela dos candidatos e outra app users, que contém o modelo de usuário da aplicação.
@@ -76,25 +78,26 @@ Gerei a documentação utilizando a lib `drf-yasg`.
 
 Os endpoints da aplicação são feitos através das GenericsAPIView do Django Rest. É um meio termo entre as 
 APIViews e ModelViewSet. Acredito ser mais fácil de entender e manter, pensando em manutenções futuras e novas 
-pessoas entrando no projeto.
+pessoas entrando no projeto. Mas também poderia ser feito com ModelViewSet, pois seria um classe de endpoint que 
+serviria para todas as operações do CRUD.
 
-Fiz testes automatizados utilizando o pyest, que, na minha opinião, é a melhor ferramente que tem para testar.
+Fiz testes automatizados utilizando o pytest, que, na minha opinião, é a melhor ferramenta que tem para testar.
 Aproveitando isso, tomei a liberdade de configurar uma action de CI aqui no github. Toda vez que é feito um pull
 request para a branch main (a branch principal), o CI executa os testes automatizados.
 
 Eu gosto sempre de criar uma pasta de testes para cada app. Nela, posso organizar em testes de models, de views, 
 de signals, etc.
 
-Caso eu tivesse mais de um model, eu teria, por exemplo, um arquivo de `test_model_modelname.py`. Da mesma forma para
-os serializers e as views de cada entidade.
+Caso eu tivesse mais de um model, eu teria, por exemplo, um arquivo de `test_model_modelname.py`. Da mesma, faria isso 
+para forma para os serializers e as views de cada entidade.
 
 ![Tests](prints/tests.png "Tests")
 
 No problema do desafio, foi pedido para que pudesse ser possível pesquisar um candidato por algum campo específico.
 Então, utilizei uma solução pronta, que é o django-filter. Através dele, posso setar o atributo filterset_class 
 nos endpoints que quero e passar a classe que irá fazer o filtro. Essa abordagem é interessante, pois desacopla os 
-filtros da lógica de view. (é muito comum ter vários filtros personalizados e isso impactando na quantidade de 
-linhas do método get_queryset())
+filtros da lógica de view. (é muito comum ter vários filtros personalizados. Por consequência, a quantidade de linhas 
+do método get_queryset() dos endpoints aumenta drasticamente.).
 
 ![Filtersets](prints/filtersets.png "Filtersets")
 
@@ -110,6 +113,12 @@ servirão para outros casos (se a aplicação fizesse o uso de forms, por exempl
 
 Apenas a validação de que o CPF não pode ser alterado é feita no serializer, através do método padrão 
 `validate_field_name`.
+
+Uma outra abordagem que poderia ser feita no serializer, seria criar uma classe `CandidateBaseSerializer`, que conteria
+todos os campos comuns do serializer. Após isso, eu poderia ter dois srializers: 
+`CandidateCreateSerializer(CandidateBaseSerializer)` e `CandidateDetailSerializer(CandidateBaseSerializer)`. A 
+única diferença entre eles dois seria o fato do CPF ser um `ReadOnlyField` no serializer de Detail. Isso é bastante 
+comum em diversos projetos.
 
 ![Serializer](prints/serializer.png "Serializer")
 
