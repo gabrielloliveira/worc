@@ -144,6 +144,8 @@ PATCH e DELETE, deve ser feita através de um token de autenticação no cabeça
 Fazemos isso com:
 `Authorization: Bearer {TOKEN}`
 
+Utilizei a lib `djangorestframework-simplejwt` para lidar com a authenticação em JWT.
+
 Já na entidade de usuário, tenho 3 endpoints:
 
     * Cadastro de usuário: POST {URL_BASE}/api/users/
