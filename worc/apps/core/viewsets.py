@@ -25,7 +25,7 @@ class CandidateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = CandidateSerializer
-    queryset = Candidate.objects.all()
+    queryset = Candidate.objects.order_by("-created_at")
 
     def get_object(self):
-        return get_object_or_404(Candidate, pk=self.kwargs.get("pk"))
+        return get_object_or_404(Candidate, uuid=self.kwargs.get("uuid"))
