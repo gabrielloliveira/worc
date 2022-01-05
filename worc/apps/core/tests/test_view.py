@@ -15,6 +15,7 @@ def test_create_candidate(api_client, db, candidate_data):
     )
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["name"] == candidate_data["name"]
+    assert response.data["age"] is not None
     assert Candidate.objects.count() == 1
 
 
