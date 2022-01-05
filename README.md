@@ -126,6 +126,38 @@ Uma curiosidade é que eu poderia ter utilizado alguns campos como `CPFField()` 
 criei https://github.com/gabrielloliveira/django-cpf.
 Porém, optei por adicionar somente o validator que eu utilizo na minha lib neste projeto.
 
+Para os logs da aplicações, eu utilizei somente o framework de log padrão do Django.
+
+** Uma observação que queria deixar é que o docker-compose do meu projeto poderia já incluir o link com o PostgreSQL. 
+Porém, como só foi um projeto de teste para a resolução do desafio, optei por deixar somente o runserver do Django **
+
+** Para os logs, eu gosto muito de utilizar o sentry. Ele é um serviço de monitoramento de erros que ajuda bastante os 
+devs. Eu optei também por não incluí-lo no projeto, porém deixo claro que ele é indisponsável para as aplicações. Uso
+em todos os projetos. **
+
+Bastaria instalá-lo no meu projeto através do comando `pip install sentry-sdk`. Na página de configuração do sentry, 
+dará o código de configuração para o projeto. Será algo parecido com isso, que colocaremos no arquivo de settings:
+```python
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn=config("SENTRY_DSN"),
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+```
+
+** O New Relic é um serviço de monitoramento de performance que também faria uso caso fosse uma aplicação de caso 
+real de uso com clientes usando. Através dele, podemos monitorar, por exemplo, se a aplicação está lenta, 
+qual rota está levando mais tempo pra processar, quanto tempo a query do BD demora pra retornar os dados. Através dessas 
+informações, podemos tomar a melhor decisão para melhorar a performance do projeto. **
+
+** Existe também o Prometheus, para incluir junto com o django. Ferramenta é o que não falta. **
+
 ## Descreva sua API REST de forma simplificada.
 
 Deixei um arquivo de Insomnia na raiz do projeto que serve de exemplo de requests já prontas.
