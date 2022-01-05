@@ -15,20 +15,21 @@ def test_create_candidate(api_client, db, candidate_data):
     )
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["name"] == candidate_data["name"]
+    assert response.data["age"] >= 18
     assert Candidate.objects.count() == 1
 
 
-def test_create_candidate_with_invalid_data(api_client, candidate_json_data, db):
+def test_create_candidate_with_invalid_data(api_client, candidate_data, db):
     """
     Test creating a candidate with invalid data
     """
-    data_without_name = candidate_json_data.copy()
+    data_without_name = candidate_data.copy()
     del data_without_name["name"]
 
-    data_without_email = candidate_json_data.copy()
+    data_without_email = candidate_data.copy()
     del data_without_email["email"]
 
-    data_without_cpf = candidate_json_data.copy()
+    data_without_cpf = candidate_data.copy()
     del data_without_cpf["cpf"]
 
     response_1 = api_client.post(reverse("core:candidate_list_create"), data={})
@@ -72,17 +73,17 @@ def test_retrieve_candidate(candidate, api_client):
     assert response.data["name"] == candidate.name
 
 
-def test_update_candidate(candidate, candidate_json_data, api_client):
+def test_update_candidate(candidate, candidate_data, api_client):
     """
     Test update candidate
     """
-    candidate_json_data["name"] = "New Name"
+    candidate_data["name"] = "New Name"
 
     response = api_client.put(
         reverse(
             "core:candidate_retrieve_update_destroy", kwargs={"uuid": candidate.uuid}
         ),
-        data=json.dumps(candidate_json_data),
+        data=json.dumps(candidate_data),
         content_type="application/json",
     )
     candidate.refresh_from_db()
