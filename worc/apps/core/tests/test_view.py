@@ -64,7 +64,9 @@ def test_retrieve_candidate(candidate, api_client):
     Test retrieve candidate
     """
     response = api_client.get(
-        reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk})
+        reverse(
+            "core:candidate_retrieve_update_destroy", kwargs={"uuid": candidate.uuid}
+        )
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.data["name"] == candidate.name
@@ -77,7 +79,9 @@ def test_update_candidate(candidate, candidate_json_data, api_client):
     candidate_json_data["name"] = "New Name"
 
     response = api_client.put(
-        reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk}),
+        reverse(
+            "core:candidate_retrieve_update_destroy", kwargs={"uuid": candidate.uuid}
+        ),
         data=json.dumps(candidate_json_data),
         content_type="application/json",
     )
@@ -93,7 +97,9 @@ def test_destroy_candidate(candidate, api_client):
     Test destroy candidate
     """
     response = api_client.delete(
-        reverse("core:candidate_retrieve_update_destroy", kwargs={"pk": candidate.pk})
+        reverse(
+            "core:candidate_retrieve_update_destroy", kwargs={"uuid": candidate.uuid}
+        )
     )
     list_response = api_client.get(reverse("core:candidate_list_create"))
     assert response.status_code == status.HTTP_204_NO_CONTENT

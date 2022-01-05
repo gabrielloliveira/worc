@@ -4,10 +4,13 @@ from worc.apps.core.models import Candidate
 
 
 class CandidateSerializer(serializers.ModelSerializer):
+    created_at = serializers.ReadOnlyField()
+    updated_at = serializers.ReadOnlyField()
+    uuid = serializers.ReadOnlyField()
+
     class Meta:
         model = Candidate
         fields = (
-            "id",
             "created_at",
             "updated_at",
             "uuid",
