@@ -131,7 +131,7 @@ Porém, optei por adicionar somente o validator que eu utilizo na minha lib nest
 Deixei um arquivo de Insomnia na raiz do projeto que serve de exemplo de requests já prontas.
 
 Para a entidade de candidatos, tenho 2 endpoints:
-`{URL_BASE}/api/candidates/` e `{URL_BASE}/api/candidates/{id}/`.
+`{URL_BASE}/api/candidates/` e `{URL_BASE}/api/candidates/{uuid}/`.
 
 Como padrão do REST, o primeiro endpoint aceita os métodos GET e POST, como listagem e 
 criação de candidatos, respectivamente.
