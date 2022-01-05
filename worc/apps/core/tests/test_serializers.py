@@ -10,17 +10,16 @@ def test_create_candidate_with_age_less_than_18(db, candidate_data):
     """
     Test that a candidate cannot be created with age less than 18.
     """
-    for i in range(17):
-        data = candidate_data.copy()
-        data["age"] = i
-        serializer = CandidateSerializer(data=data)
-        assert not serializer.is_valid()
-        assert serializer.errors["age"] == [
-            ErrorDetail(
-                string="Ensure this value is greater than or equal to 18.",
-                code="min_value",
-            )
-        ]
+    data = candidate_data.copy()
+    data["birthday"] = "2022-01-01"
+    serializer = CandidateSerializer(data=data)
+    assert not serializer.is_valid()
+    assert serializer.errors["birthday"] == [
+        ErrorDetail(
+            string="Candidato deve ser maior de 18 anos.",
+            code="invalid_age",
+        )
+    ]
 
 
 def test_create_candidate_with_invalid_cpf(db, candidate_data):
