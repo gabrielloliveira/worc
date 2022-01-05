@@ -111,16 +111,21 @@ servirão para outros casos (se a aplicação fizesse o uso de forms, por exempl
 
 ![Validators](prints/validators.png "Validators")
 
-Apenas a validação de que o CPF não pode ser alterado é feita no serializer, através do método padrão 
-`validate_field_name`.
+No serializer, existem duas validações, feitas no método padrão `validate_field_name`:
+- O CPF não pode ser alterado, através do método padrão.
+- A idade do candidato deve ser maior ou igual a 18 anos.
+
+![Serializer](prints/serializer.png "Serializer")
+
+Esse é o serializer que será utilizado para a API:
+
+![Serializer](prints/serializer2.png "Serializer")
 
 Uma outra abordagem que poderia ser feita no serializer, seria criar uma classe `CandidateBaseSerializer`, que conteria
 todos os campos comuns do serializer. Após isso, eu poderia ter dois srializers: 
 `CandidateCreateSerializer(CandidateBaseSerializer)` e `CandidateDetailSerializer(CandidateBaseSerializer)`. A 
 única diferença entre eles dois seria o fato do CPF ser um `ReadOnlyField` no serializer de Detail. Isso é bastante 
 comum em diversos projetos.
-
-![Serializer](prints/serializer.png "Serializer")
 
 Uma curiosidade é que eu poderia ter utilizado alguns campos como `CPFField()` que existem numa lib que eu 
 criei https://github.com/gabrielloliveira/django-cpf.
